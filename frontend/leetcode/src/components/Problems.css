@@ -1,0 +1,55 @@
+
+.table-container {
+  padding: 20px;
+  overflow-x: auto;
+}
+
+.problem-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.problem-table th,
+.problem-table td {
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.problem-table th {
+  background-color: #f4f4f4;
+}
+
+.problem-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.problem-title {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.problem-title:hover {
+  text-decoration: underline;
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: white;
+  font-size: 12px;
+}
+
+.badge.easy {
+  background-color: #28a745; /* Green */
+}
+
+.badge.medium {
+  background-color: #ffc107; /* Yellow */
+  color: black;
+}
+
+.badge.hard {
+  background-color: #dc3545; /* Red */
+}

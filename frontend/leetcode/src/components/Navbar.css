@@ -1,0 +1,30 @@
+.navbar{
+    width:100%; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 7%;
+    background-color: #fff;
+}
+ul{
+    flex:1;
+    list-style: none;
+    text-align: center;
+    
+}
+ul li{
+    display: inline-block;
+    margin: 10px 20px;
+    font-size: 18px;
+}
+.no-underline{
+    text-decoration: none;
+    color: #000;
+    font-size: 18px;
+    margin: 10px 20px;
+}
+
+.log{
+    color: #000;
+    background-color: #000;
+}
