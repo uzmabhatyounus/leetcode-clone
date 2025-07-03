@@ -1,15 +1,14 @@
 import React, { use, useState } from "react";
-import {Link} from "react-router-dom"
 import "./Login.css"
 import axios from "axios";
+import {Link} from "react-router-dom"
 
 
-function Login() {
+function Signup() {
     const [userInfo, setInfo] = useState({
         email: "",
         password: ""
     })
-
 
 
     function handleChange(event) {
@@ -25,24 +24,25 @@ function Login() {
     }
 
     async function handleSubmit(event) {
-        const response = await axios.post("http://localhost:3000/login",{
+        const response = await axios.post("http://localhost:3000/signup",{
             username:userInfo.email,
             password:userInfo.password
         })
         const result = response.data
-        localStorage.setItem("token",result.token)
         console.log(result);
+        alert(result.msg)
 
 
 
         event.preventDefault();
 
         
-    } 
+    }
     return (
         <div className="login-box">
             <div className="inner-box">
-                    <h2>Login</h2>
+        
+                    <h2>Register</h2>
                     <input name="email" type="text" onChange={handleChange} placeholder="Email. " value={userInfo.email} />
                     <input name="password" type="password" onChange={handleChange} placeholder="Password" value={userInfo.password} />
                     <button
@@ -50,13 +50,13 @@ function Login() {
                         type="submit"
                         onClick={handleSubmit}
                     >
-                        Sign in
+                        Register
                     </button>
-                    <p>Dont have a account?. <Link to={"/signup"}>Register</Link></p>
+                    <p>Have a account?. <Link to={"/login"}>Log in</Link></p>
             </div>
         </div>
     )
 
 }
 
-export default Login
+export default Signup

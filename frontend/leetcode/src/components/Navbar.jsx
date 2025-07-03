@@ -11,7 +11,7 @@ function Navbar(){
             <div className='navbar'>
       <ArrowBackIosIcon />
       <ul>
-        <li><Link className="no-underline">Home</Link></li>
+        <li><Link className="no-underline" to={"/"}>Home</Link></li>
         <li><Link to={"/problems"} className="no-underline">Problems</Link></li>
         <li><Link className="no-underline">About</Link></li>
         <li><Link className="no-underline">Contact</Link></li>

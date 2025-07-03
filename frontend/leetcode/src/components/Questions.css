@@ -1,6 +1,6 @@
 .question-wrapper {
   height: 100vh;
-  width: 50%; /* or 60% */
+  width: 100%; /* or 60% */
   margin: 0;
   padding: 24px;
   background-color: #fff;
@@ -13,7 +13,7 @@
   font-size: 26px;
   font-weight: 700;
   margin-bottom: 16px;
-}
+} 
 
 .question-description {
   font-size: 16px;

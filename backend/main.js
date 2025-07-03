@@ -1,11 +1,15 @@
 import express from "express";
-import bodyParser from "body-parser";
-
+import {questions1} from "./questions.js"
+import jwt from "jsonwebtoken"
+import auth from "./midleware.js"
+import cors from "cors"
+import blogs from "./blog.js";
 const app = express();
 const port = 3000;
 
-
-app.use(bodyParser.urlencoded())
+app.use(cors())
+app.use(express.urlencoded({ extended: true })); // for form submissions
+app.use(express.json()); // for JSON payloads
 
 var user =[
     {
@@ -15,39 +19,45 @@ var user =[
     },
 ]
 
-var questions = [
-    {
-        id:1,
-        title :"Two states",
-        description : "give an array return the maximum of array . ",
-        testCases : [
-            {
-                input : "[1,2,3,4,5]",
-                output: "5"
-            }
-        ]
-    },
-        {
-        id:2,
-        title :"Two states",
-        description : "give an array return the minimun of array . ",
-        testCases : [
-            {
-                input : "[1,2,3,4,5]",
-                output: "1"
-            }
-        ]
-    }
-]
+const JWT_SECRET = "secret"
+
+
+
+
 
 
 var submissions = []
-app.get("/", (req,res)=>{
-    res.render("index.ejs")
+
+app.get("/blogs",(req,res)=>{
+    res.json(blogs)
 })
-app.get("/signup", (req,res)=>{
-    res.render("signup.ejs")
+
+app.get("/problems",(req,res)=>{
+    const filteredProblems = questions1.map( (x)=>({
+        id:x.id,
+        title:x.title,
+        acceptance:x.acceptance,
+        difficulty:x.difficulty,
+    }))
+    res.json({
+        problems:filteredProblems
+    })
 })
+
+app.get("/problems/:id",(req,res)=>{
+    const cID = req.params.id;
+    console.log(cID)
+    const question = questions1.find(q=> q.id == cID)
+    console.log(question)
+    res.json(question)
+})
+
+
+app.get("/",(req,res)=>{
+    console.log(user)
+    res.send("heloo")
+})
+
 
 app.post("/signup", (req,res)=>{
     const Cusername = req.body.username
@@ -57,26 +67,21 @@ app.post("/signup", (req,res)=>{
         username: Cusername,
         password: Cpassword
     }
-    const current_user =  user.find((u)=> u.username === Cusername)
-    console.log(Cusername)
-    console.log(current_user)
-    if (current_user){
-        console.log("user already exists")
 
-        res.redirect("/signup")
+    if (user.find((u)=> u.username === Cusername)){
+        console.log("user already exists")
+        return res.status(403).json({msg:"Email already exists."})
     }
     
-    else{
-        user.push(new_user);
-        console.log(user)
-        res.redirect("/questions")
-    }
+
+    user.push(new_user);
+    return res.json({
+        msg:"success"
+    })
 })
 
 
-app.get("/login", (req,res)=>{
-    res.render("login.ejs")
-})
+
 
 app.post("/login",(req,res)=>{
     const currentUsername = req.body.username
@@ -84,19 +89,24 @@ app.post("/login",(req,res)=>{
 
     const current_user = user.find((u)=>u.username === currentUsername);
 
-    if (current_user){
-        if (current_user.password === currentPassword){
-            console.log("login succesful")
-            res.redirect("/questions")
-        }
-        else{
-            console.log("wrong password")
-            res.redirect("/login")
-        }
-    }else{
+    if(!current_user){
         console.log("Username doesnot exists")
-        res.redirect("/login")
+        return res.status(403).json({msg:"no user found"})
     }
+
+    if((current_user.password !== currentPassword)){
+            console.log("wrong password")
+            res.status(403).json({msg:"incorect password"})
+        }
+
+    const token = jwt.sign({
+        id : current_user.id
+    },JWT_SECRET)
+
+    console.log("login succesful")
+    res.json({token})
+
+
 })
 
 app.get("/questions", (req,res)=>{
@@ -105,10 +115,33 @@ app.get("/questions", (req,res)=>{
 app.get("/submissions", (req,res)=>{
     res.render("submission.ejs")
 })
-app.post("/submissions", (req,res)=>{
-    const new_sub = req.body.submision
-    submissions.push(new_sub)
-    res.redirect("/questions")
+app.post("/submissions", auth,(req,res)=>{
+    const iscorrect = Math.random()<0.5;
+    const problemId = req.body.id;
+    const submission = req.body.submission;
+    if (iscorrect){
+        submissions.push({
+            newSubmission: submission,
+            problemId : problemId,
+            // userId:req.userId,
+            userId:1,
+            status:"ac"
+        })
+        return res.json({
+            status:"ac"
+        })
+    }else{
+         submissions.push({
+            newSubmission: submission,
+            problemId : problemId,
+            // userId:req.userId,
+             userId:1,
+            status:"wa"
+        })
+        return res.json({
+            status:"wa"
+        })
+    }
 })
 
 

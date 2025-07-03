@@ -1,23 +1,26 @@
-import React, { useState } from "react";
-import { questions1, questions2 } from "../../questions";
+import React, { useState,useEffect } from "react";
+// import { questions1, questions2 } from "../../questions";
 import "./Problems.css"
 import { Link } from "react-router-dom";
+import axios from "axios";
 function Problems() {
 
-    const [questions, setquestion] = useState(questions1)
-    console.log(questions)
-    function p1() {
-        setquestion(questions1)
+    const [questions, setquestion] = useState([])
+    
+    async function init(){
+        const response = await axios.get("http://localhost:3000/problems")
+        const result = response.data;
+        setquestion(result.problems)
     }
+    useEffect( ()=>{
+        init()
+    },[]
 
-    function p2() {
-        setquestion(questions2)
-    }
+    )
+
     return (
         <div className="ts-container">
     <div className="table-container">
-        {/* <button onClick={p1}>1</button>
-        <button onClick={p2}>2</button> */}
         
         <table className="problem-table">
             <thead>

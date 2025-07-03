@@ -5,8 +5,11 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Login from './components/Login';
-import Problems from './components/Problems';
+import Problems from './components/Problems.jsx';
 import Submission from './components/Submission';
+import Signup from './components/Signup';
+import Navbar from "./components/Navbar";
+import BlogList from './components/blogs.jsx';
 
 function App() {
 
@@ -14,23 +17,24 @@ function App() {
   const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
-    children:[
-      {
-        path: "login",
-        element:<Login />
-      },
-      {
-        path:"problems",
-        element:<Problems />
-      }
-
-    ]
+    element:<><Home /> <BlogList /></> ,
+    
   },
   {
     path:"/problems/:id",
-    element:<Submission />
-  }
+    element: <> <Navbar/><Submission /></>
+  },
+  {
+        path: "/login",
+        element:<> <Navbar/><Login /></>
+      },
+      {
+        path:"/problems",
+        element:<> <Navbar/><Problems /></>
+      },{
+        path:"/signup",
+        element:<> <Navbar/><Signup /></>
+      }
 ]);
 
   return (
